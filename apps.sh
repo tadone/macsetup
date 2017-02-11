@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/usr/local/bin/zsh -x
 sudo -v
 
 # Install Prezto (ZSH configuration framework)

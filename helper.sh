@@ -352,3 +352,20 @@ show_spinner() {
     done
 
 }
+
+git_clone() {
+  if cmd_exists "git"; then
+    if [[ ! -d "$2" ]]; then
+      mkdir "$2" && \
+      git clone "$1" "$2"
+      print_in_green "$3"
+    else
+      print_warning "$2 already exists"
+      print_warning "To update: git pull && git submodule update --init --recursive"
+    fi
+  else
+    print_error "Git is not installed"
+    exit
+  fi
+
+}
