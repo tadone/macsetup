@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 
 helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
 dotfiles_dir="$HOME/Projects/dotfiles"
@@ -59,7 +59,7 @@ else
 fi
 
 print_in_purple "\n • Changing to ZSH\n\n"
-chsh -s "$zsh_path" <& echo "$PASSWORD" #&> /dev/null # Change default shell to ZSH
+chsh -s "$zsh_path" &> /dev/null # Change default shell to ZSH
 
 # Clone dotfiles & macsetup
 #
@@ -82,12 +82,13 @@ chsh -s "$zsh_path" <& echo "$PASSWORD" #&> /dev/null # Change default shell to 
 #   print_warning "To update: git pull && git submodule update --init --recursive"
 # fi
 git_clone "https://github.com/tadone/dotfiles-tad" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
-git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned to $macsetup_dir" 
+git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned to $macsetup_dir"
 # Install Apps with Homebrew
-if [[ -x "$PWD/apps.sh" ]]; then
+if [[ -e "$PWD/apps.sh" ]]; then
   . "$PWD/apps.sh" || exit
 else
   print_error "Can't access apps.sh"
+  exit
 fi
 
 

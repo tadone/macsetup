@@ -357,8 +357,8 @@ git_clone() {
   if cmd_exists "git"; then
     if [[ ! -d "$2" ]]; then
       mkdir "$2" && \
-      git clone "$1" "$2"
-      print_in_green "$3"
+      git clone "$1" "$2" &> /dev/null
+      print_success "$3"
     else
       print_warning "$2 already exists"
       print_warning "To update: git pull && git submodule update --init --recursive"
