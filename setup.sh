@@ -36,8 +36,8 @@ if ! cmd_exists "brew"; then
         #  └─ simulate the ENTER keypress
 else
   print_in_purple "\n • Updating Homebrew\n\n"
-  execute "brew update" "Homebrew Updated" && \
-  execute "brew upgrade" "Homebrew Upgraded"
+  #execute "brew update" "Homebrew Updated" && \
+  #execute "brew upgrade" "Homebrew Upgraded"
 fi
 
 # Install essentials with Homebrew
@@ -62,30 +62,12 @@ print_in_purple "\n • Changing to ZSH\n\n"
 chsh -s "$zsh_path" &> /dev/null # Change default shell to ZSH
 
 # Clone dotfiles & macsetup
-#
-# if cmd_exists "git"; then
-#   if [[ ! -d "$dotfiles_dir" ]]; then
-#     mkdir "$dotfiles_dir" && \
-#     execute "git clone https://github.com/tadone/dotfiles-tad $dotfiles_dir" "Cloned dotfiles to $dotfiles_dir"
-#   else
-#     print_warning "$dotfiles_dir directory already exists"
-#     print_warning "Please run Git Pull to update files."
-#   fi
-# fi
-#
-# if [[ ! -d "$HOME/Projects/macsetup" ]]; then
-#   mkdir "$HOME/Projects/macsetup" && \
-#   execute "git clone https://github.com/tadone/macsetup $HOME/Projects/macsetup" \
-#   "Cloned macsetup to $HOME/Projects/macsetup"
-# else
-#   print_warning "$HOME/Projects/macsetup already exists"
-#   print_warning "To update: git pull && git submodule update --init --recursive"
-# fi
+print_in_purple "\n • Cloning Git dotfiles & macsetup\n\n"
 git_clone "https://github.com/tadone/dotfiles-tad" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
 git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned to $macsetup_dir"
 # Install Apps with Homebrew
 if [[ -e "$PWD/apps.sh" ]]; then
-  . "$PWD/apps.sh" || exit
+  /usr/local/bin/zsh "$PWD/apps.sh" || exit
 else
   print_error "Can't access apps.sh"
   exit
