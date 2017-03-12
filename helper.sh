@@ -408,3 +408,20 @@ brew_install() {
     fi
 
 }
+
+brew_tap() {
+    brew tap "$1" &> /dev/null
+}
+
+mas_install() {
+  declare -r APP_READABLE_NAME="$1" # MAS name to print
+  declare -r APP_ID="$2" # MAS formula name
+  # Check if MAS is installed
+  if ! cmd_exists "mas"; then
+      print_error "$APP_READABLE_NAME ('MAS' is not installed)"
+      return 1
+  fi
+  # Install specified app
+  execute \
+      "mas install $APP_ID" "$APP_READABLE_NAME"
+}

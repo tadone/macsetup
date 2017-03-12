@@ -45,8 +45,8 @@ fi
 
 # Install essentials with Homebrew
 
-execute "brew install git" "Git Installed"
-execute "brew install zsh" "ZSH Installed"
+brew_install "Git" "git"
+brew_install "ZSH" "zsh"
 
 # Change to ZSH
 print_in_purple "\n • Changing to ZSH\n\n"
