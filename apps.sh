@@ -14,5 +14,62 @@ else
   print_result $?
 fi
 
-print_success "All done"
-# Install rest of Homebrew packages
+# Install rest of Homebrew packages (Non-GUI)
+print_in_purple "\n   Installing Homebrew Apps\n\n"
+
+brew_install "GNU Tools" "coreutils"
+brew_install "Find Utils" "findutils"
+brew_install "ssh-copy-id" "ssh-copy-id"
+brew_install "ShellCheck" "shellcheck"
+brew_install "Vim" "vim --with-override-system-vi"
+brew_install "Youtube DL" "youtube-dl"
+brew_install "Htop" "htop-osx"
+brew_install "Wget" "wget"
+brew_install "SpeedTest CLI" "speedtest-cli"
+brew_install "NCurses Disk Usage" "ncdu"
+brew_install "PV Progress Indicator" "pv"
+brew_install "Rdiff Backup Util" "rdiff-backup"
+brew_install "Ranger File Manager" "ranger"
+brew_install "Dark Mode" "dark-mode"
+brew_install "Ansible" "ansible"
+brew_install "Hub" "hub"
+brew_install "Archey" "archey"
+brew_install "Tree" "tree"
+brew_install "Nmap" "nmap"
+brew_install "Elinks" "elinks"
+brew_install "reattach-to-user-namespace" "reattach-to-user-namespace"
+
+# Install Mac App Store (mas) command line tool
+brew_install "Mas" "mas"
+
+# GUI Tools
+brew_install "iTerm2" "iterm2-beta" "caskroom/versions" "cask"
+brew_install "Chrome" "google-chrome" "caskroom/cask" "cask"
+brew_install "Spectacle" "spectacle" "caskroom/cask" "cask"
+brew_install "Transmission" "transmission" "caskroom/cask" "cask"
+brew_install "Unarchiver" "the-unarchiver" "caskroom/cask" "cask"
+brew_install "1Password" "1password" "caskroom/cask" "cask"
+brew_install "Dropbox" "dropbox" "caskroom/cask" "cask"
+brew_install "MPV Player" "mpv" "caskroom/cask" "cask"
+brew_install "CheatSheet" "cheatsheet" "caskroom/cask" "cask"
+#brew_install "Skype" "skype" "caskroom/cask" "cask"
+brew_install "AppCleaner Free" "appcleaner" "caskroom/cask" "cask"
+brew_install "Flux" "flux" "caskroom/cask" "cask"
+brew_install "Sourcetree" "sourcetree"
+#brew_install "Libre Office" "libreoffice" "caskroom/cask" "cask"
+brew_install "Font: Inconsolata-DZ" "font-inconsolata-dz" "caskroom/fonts"
+brew_install "Font: Inconsolata-G" "font-inconsolata-g-for-powerline" "caskroom/fonts"
+brew_install "Font: Source Code Pro" "font-source-code-pro" "caskroom/fonts"
+brew_install "Font: Fira Mono" "font-fira-mono" "caskroom/fonts"
+brew_install "Font: Roboto" "font-roboto" "caskroom/fonts"
+brew_install "Quick Look: ZIP" "betterzipql" "caskroom/cask" "cask"
+brew_install "Quick Look: Image Size" "qlimagesize" "caskroom/cask" "cask"
+
+
+# Install Mac App Store Apps via mas
+# https://libraries.io/homebrew/mas
+mas_install "Reeder 3" "880001334"
+mas_install "1password" "443987910"
+mas_install "Cathode" "499233976"
+mas_install "Magnet" "441258766"
+mas_install "Skitch" "425955336"
