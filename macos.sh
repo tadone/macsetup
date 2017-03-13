@@ -1,4 +1,5 @@
 #!/bin/bash
+source /tmp/helper.sh
 
 execute "defaults write com.apple.dashboard mcx-disabled -bool true" \
     "Disable Dashboard"
