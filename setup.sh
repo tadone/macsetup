@@ -64,7 +64,7 @@ chsh -s "$zsh_path" &> /dev/null # Change default shell to ZSH
 
 # Clone dotfiles & macsetup
 print_in_purple "\n • Cloning Git dotfiles & macsetup\n\n"
-git_clone "https://github.com/tadone/dotfiles-tad" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
+git_clone "https://github.com/tadone/dotfiles" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
 git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned to $macsetup_dir"
 
 # Install Apps with Homebrew
