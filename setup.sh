@@ -63,7 +63,7 @@ git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned 
 
 # Install Apps with Homebrew
 if [[ -e "$PWD/apps.sh" ]]; then
-  "$zsh_path" "$PWD/apps.sh" || exit
+  "$zsh_path" "$macestup_dir/apps.sh" || exit
 else
   print_error "Can't access apps.sh"
   exit
@@ -71,7 +71,7 @@ fi
 
 # MacOS Defaults
 if [[ -e "$PWD/macos.sh" ]]; then
-  "$zsh_path" "$PWD/macos.sh" || exit
+  "$zsh_path" "$macsetup_dir/macos.sh" || exit
 else
   print_error "Can't access macos.sh"
   exit
