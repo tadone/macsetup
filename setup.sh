@@ -7,13 +7,7 @@ the_user=$(whoami)
 
 # Helper Functions
 printf "\n • Get file containing helper functions\n\n"
-if [[ -e "/tmp/helper.sh" ]]; then
-  . "/tmp/helper.sh" || exit
-  print_in_purple "\n • Helper file loaded\n\n"
-else
-  curl --progress-bar $helper_url -o /tmp/helper.sh && . "/tmp/helper.sh" || \
-  exit
-fi
+curl --progress-bar $helper_url -o /tmp/helper.sh && . "/tmp/helper.sh" || exit
 
 # Ask for the administrator password upfront.
 ask_for_sudo
