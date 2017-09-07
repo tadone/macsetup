@@ -6,8 +6,8 @@ execute "defaults write com.apple.dashboard mcx-disabled -bool true" \
 
 print_in_purple "\n   Dock\n\n"
 
-#execute "defaults write com.apple.dock autohide -bool true" \
-#    "Automatically hide/show the Dock"
+execute "defaults write com.apple.dock autohide -bool true" \
+    "Automatically hide/show the Dock"
 
 execute "defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true" \
     "Enable spring loading for all Dock items"
@@ -28,21 +28,11 @@ execute "defaults write com.apple.dock wvous-tr-modifier -int 0" \
 execute "defaults write com.apple.dock mineffect -string 'scale'" \
     "Change minimize/maximize window effect to scale"
 
-execute "defaults write com.apple.dock minimize-to-application -bool true" \
-    "Reduce clutter by minimizing windows into their application icons"
-
 execute "defaults write com.apple.dock mru-spaces -bool false" \
     "Do not automatically rearrange spaces based on most recent use"
 
-execute "defaults write com.apple.dock persistent-apps -array && \
-         defaults write com.apple.dock persistent-others -array " \
-    "Wipe all app icons"
-
 execute "defaults write com.apple.dock show-process-indicators -bool true" \
     "Show indicator lights for open applications"
-
-execute "defaults write com.apple.dock showhidden -bool true" \
-    "Make icons of hidden applications translucent"
 
 execute "defaults write com.apple.dock tilesize -int 32" \
     "Set dock icon sizeto 32px"
@@ -79,9 +69,6 @@ execute "defaults write com.apple.finder FXDefaultSearchScope -string 'SCcf'" \
 execute "defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false" \
     "Disable warning when changing a file extension"
 
-execute "defaults write com.apple.finder FXPreferredViewStyle -string 'Nlsv'" \
-    "Use list view in all Finder windows by default"
-
 execute "defaults write com.apple.finder NewWindowTarget -string 'PfDe' && \
          defaults write com.apple.finder NewWindowTargetPath -string 'file://$HOME/Downloads/'" \
     "Set 'Desktop' as the default location for new Finder windows"
@@ -98,29 +85,29 @@ execute "defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool t
 execute "defaults write -g AppleShowAllExtensions -bool true" \
     "Show all filename extensions"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:iconSize 72' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:iconSize 72' ~/Library/Preferences/com.apple.finder.plist" \
-    "Set icon size"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:iconSize 72' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:iconSize 72' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Set icon size"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:gridSpacing 1' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:gridSpacing 1' ~/Library/Preferences/com.apple.finder.plist" \
-    "Set icon grid spacing size"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:gridSpacing 1' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:gridSpacing 1' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Set icon grid spacing size"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:textSize 13' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:textSize 13' ~/Library/Preferences/com.apple.finder.plist" \
-    "Set icon label text size"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:textSize 13' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:textSize 13' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Set icon label text size"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:labelOnBottom true' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:labelOnBottom true' ~/Library/Preferences/com.apple.finder.plist" \
-    "Set icon label position"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:labelOnBottom true' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:labelOnBottom true' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Set icon label position"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:showItemInfo true' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:showItemInfo true' ~/Library/Preferences/com.apple.finder.plist" \
-    "Show item info"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:showItemInfo true' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:showItemInfo true' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Show item info"
 
-execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:arrangeBy none' ~/Library/Preferences/com.apple.finder.plist && \
-         /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:arrangeBy none' ~/Library/Preferences/com.apple.finder.plist" \
-    "Set sort method"
+# execute "/usr/libexec/PlistBuddy -c 'Set :DesktopViewSettings:IconViewSettings:arrangeBy none' ~/Library/Preferences/com.apple.finder.plist && \
+#          /usr/libexec/PlistBuddy -c 'Set :StandardViewSettings:IconViewSettings:arrangeBy none' ~/Library/Preferences/com.apple.finder.plist" \
+#     "Set sort method"
 
 killall "Finder" &> /dev/null
 
@@ -223,8 +210,8 @@ execute "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Track
 
 print_in_purple "\n   UI & UX\n\n"
 
-execute "defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false" \
-    "Disable “natural” (Lion-style) scrolling"
+# execute "defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false" \
+#     "Disable “natural” (Lion-style) scrolling"
 
 execute "defaults write com.apple.frameworks.diskimages skip-verify -bool true" \
     "Disable disk image verification"
@@ -269,32 +256,32 @@ execute "defaults write -g NSUseAnimatedFocusRing -bool false" \
 execute "defaults write -g PMPrintingExpandedStateForPrint -bool true" \
     "Expand print panel by default"
 
-execute "sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string 'Laptop' && \
-         sudo scutil --set ComputerName 'tad-one-osx' && \
-         sudo scutil --set HostName 'tad-one-osx' && \
-         sudo scutil --set LocalHostName 'tad-one-osx'" \
-    "Set computer name to 'tad-one-osx'"
+# execute "sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string 'Laptop' && \
+#          sudo scutil --set ComputerName 'tad-one-osx' && \
+#          sudo scutil --set HostName 'tad-one-osx' && \
+#          sudo scutil --set LocalHostName 'tad-one-osx'" \
+#     "Set computer name to 'tad-one-osx'"
 
 execute "sudo systemsetup -setrestartfreeze on" \
     "Restart automatically if the computer freezes"
 
-execute "sudo defaults write /Library/Preferences/com.apple.Bluetooth.plist ControllerPowerState 0 && \
-         sudo launchctl unload /System/Library/LaunchDaemons/com.apple.blued.plist && \
-         sudo launchctl load /System/Library/LaunchDaemons/com.apple.blued.plist" \
-    "Turn Bluetooth off"
+# execute "sudo defaults write /Library/Preferences/com.apple.Bluetooth.plist ControllerPowerState 0 && \
+#          sudo launchctl unload /System/Library/LaunchDaemons/com.apple.blued.plist && \
+#          sudo launchctl load /System/Library/LaunchDaemons/com.apple.blued.plist" \
+#     "Turn Bluetooth off"
 
-execute "for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
-            sudo defaults write \"\${domain}\" dontAutoLoad -array \
-                '/System/Library/CoreServices/Menu Extras/TimeMachine.menu' \
-                '/System/Library/CoreServices/Menu Extras/Volume.menu'
-         done \
-            && sudo defaults write com.apple.systemuiserver menuExtras -array \
-                '/System/Library/CoreServices/Menu Extras/Bluetooth.menu' \
-                '/System/Library/CoreServices/Menu Extras/AirPort.menu' \
-                '/System/Library/CoreServices/Menu Extras/Battery.menu' \
-                '/System/Library/CoreServices/Menu Extras/Clock.menu'
-        " \
-    "Hide Time Machine and Volume icons from the menu bar"
+# execute "for domain in ~/Library/Preferences/ByHost/com.apple.systemuiserver.*; do
+#             sudo defaults write \"\${domain}\" dontAutoLoad -array \
+#                 '/System/Library/CoreServices/Menu Extras/TimeMachine.menu' \
+#                 '/System/Library/CoreServices/Menu Extras/Volume.menu'
+#          done \
+#             && sudo defaults write com.apple.systemuiserver menuExtras -array \
+#                 '/System/Library/CoreServices/Menu Extras/Bluetooth.menu' \
+#                 '/System/Library/CoreServices/Menu Extras/AirPort.menu' \
+#                 '/System/Library/CoreServices/Menu Extras/Battery.menu' \
+#                 '/System/Library/CoreServices/Menu Extras/Clock.menu'
+#         " \
+#     "Hide Time Machine and Volume icons from the menu bar"
 
 killall "SystemUIServer" &> /dev/null
 
