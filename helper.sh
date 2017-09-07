@@ -356,7 +356,7 @@ show_spinner() {
 git_clone() {
   if cmd_exists "git"; then
     if [[ ! -d "$2" ]]; then
-      mkdir "$2" && \
+      mkdir -p "$2" && \
       git clone "$1" "$2" &> /dev/null
       print_success "$3"
     else
