@@ -84,6 +84,8 @@ else
 fi
 
 # Create Links from dotfiles
-
+print_in_purple "\n • Linking from dotfiles\n\n"
+ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"
+ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"
 
 print_in_green "\n • Finished!!!\n\n"
