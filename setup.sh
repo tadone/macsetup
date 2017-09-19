@@ -1,9 +1,9 @@
 #!/bin/bash
 
-helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
-dotfiles_dir="$HOME/Projects/dotfiles"
-macsetup_dir="$HOME/Projects/macsetup"
-the_user=$(whoami)
+export helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
+export dotfiles_dir="$HOME/Projects/dotfiles"
+export macsetup_dir="$HOME/Projects/macsetup"
+export the_user=$(whoami)
 
 # Helper Functions
 printf "\n • Get file containing helper functions\n\n"
