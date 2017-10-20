@@ -1,12 +1,14 @@
 #!/bin/bash
 
-helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
-dotfiles_dir="$HOME/Projects/dotfiles"
-macsetup_dir="$HOME/Projects/macsetup"
-the_user=$(whoami)
+export helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
+export dotfiles_dir="$HOME/Projects/dotfiles"
+export macsetup_dir="$HOME/Projects/macsetup"
+export the_user=$(whoami)
 
 # Helper Functions
-printf "\n • Get file containing helper functions\n\n"
+PURPLE=$(tput setaf 5)
+NORMALL=$(tput sgr0)
+printf "%b" "$PURPLE\n • Get file containing helper functions\n\n$NORMALL"
 curl --progress-bar $helper_url -o /tmp/helper.sh && . "/tmp/helper.sh" || exit
 
 # Ask for the administrator password upfront.
@@ -54,7 +56,7 @@ else
   print_success "$zsh_path already exists in /etc/shells"
 fi
 
-chsh -s "$zsh_path" &> /dev/null # Change default shell to ZSH
+sudo chsh -s "$zsh_path" "$the_user" &> /dev/null # Change default shell to ZSH
 
 # Clone dotfiles & macsetup
 print_in_purple "\n • Cloning Git dotfiles & macsetup\n\n"
@@ -63,7 +65,7 @@ git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned 
 
 # Install Apps with Homebrew
 if [[ -e "$macsetup_dir/apps.sh" ]]; then
-  "$zsh_path" "$macestup_dir/apps.sh" || exit
+  "$zsh_path" "$macsetup_dir/apps.sh" || exit
 else
   print_error "Can't access apps.sh"
   exit
@@ -76,10 +78,11 @@ else
   print_error "Can't access macos.sh"
   exit
 fi
-
+# Install Atom packages with apm
+apm install --packages-file "$dotfiles_dir/atom_packages.list"
 # Create Links from dotfiles
 print_in_purple "\n • Linking from dotfiles\n\n"
-ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"
-ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"
+execute 'ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"' "Linked vimrc-mac"
+execute 'ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"' "Linked zshrc"
 
 print_in_green "\n • Finished!!!\n\n"
