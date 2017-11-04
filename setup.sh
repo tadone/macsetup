@@ -84,5 +84,8 @@ apm install --packages-file "$dotfiles_dir/atom_packages.list"
 print_in_purple "\n • Linking from dotfiles\n\n"
 execute 'ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"' "Linked vimrc-mac"
 execute 'ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"' "Linked zshrc"
+# Docker completion for Prezto ZSH
+execute 'curl -fLo ~/.zprezto/modules/completion/external/src/_docker \
+  https://raw.github.com/felixr/docker-zsh-completion/master/_docker'
 
 print_in_green "\n • Finished!!!\n\n"
