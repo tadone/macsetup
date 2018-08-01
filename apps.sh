@@ -1,19 +1,5 @@
-#!/usr/local/bin/zsh
+#!/bin/bash
 source /tmp/helper.sh
-
-# Install Prezto (ZSH configuration framework)
-print_in_purple "\n • Seting up Presto ZSH framework"
-if [[ ! -d "$HOME/.zprezto" ]]; then
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-  setopt EXTENDED_GLOB
-    for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-      ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}" &> /dev/null
-    done
-else
-  print_in_green "\n • Prezto already installed. Pulling latest changes from repository\n\n"
-  git -C "$HOME/.zprezto" pull && git -C "$HOME/.zprezto" submodule update --init --recursive &> /dev/null/
-  print_result $? "Presto update"
-fi
 
 # Install rest of Homebrew packages (Non-GUI)
 print_in_purple "\n • Installing Homebrew Apps\n\n"
