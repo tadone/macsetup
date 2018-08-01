@@ -35,8 +35,8 @@ if ! cmd_exists "brew"; then
         #  └─ simulate the ENTER keypress
 else
   print_in_purple "\n • Updating Homebrew\n\n"
-  #execute "brew update" "Homebrew Updated" && \
-  #execute "brew upgrade" "Homebrew Upgraded"
+  execute "brew update" "Homebrew Updated" && \
+  execute "brew upgrade" "Homebrew Upgraded"
 fi
 
 # Install essentials with Homebrew
@@ -97,7 +97,7 @@ else
   exit
 fi
 # Install Atom packages with apm
-apm install --packages-file "$dotfiles_dir/atom_packages.list"
+apm install --packages-file "$dotfiles_dir/work-package-list.txt"
 # Create Links from dotfiles
 print_in_purple "\n • Linking from dotfiles\n\n"
 execute 'ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"' "Linked vimrc-mac"
