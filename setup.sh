@@ -5,6 +5,9 @@ export dotfiles_dir="$HOME/Projects/dotfiles"
 export macsetup_dir="$HOME/Projects/macsetup"
 export the_user=$(whoami)
 
+# Prevent System Sleep
+/usr/bin/caffeinate -dimu -w $$ &
+
 # Helper Functions
 PURPLE=$(tput setaf 5)
 NORMALL=$(tput sgr0)
@@ -60,16 +63,20 @@ fi
 sudo chsh -s "$zsh_path" "$the_user" &> /dev/null # Change default shell to ZSH
 
 # Install Prezto (ZSH configuration framework)
-print_in_purple "\n • Seting up Presto ZSH framework"
+print_in_purple "\n • Seting up Presto ZSH framework\n\n"
 if [[ ! -d "$HOME/.zprezto" ]]; then
   git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
   # Create links to zsh config files
-  ln -s ~/.zprezto/runcoms/zlogin ~/.zlogin
-  ln -s ~/.zprezto/runcoms/zlogout ~/.zlogout
-  ln -s ~/.zprezto/runcoms/zpreztorc ~/.zpreztorc
-  ln -s ~/.zprezto/runcoms/zprofile ~/.zprofile
-  ln -s ~/.zprezto/runcoms/zshenv ~/.zshenv
-  ln -s ~/.zprezto/runcoms/zshrc ~/.zshrc
+  ZFILES=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
+  for file in "${ZFILES[@]}";do
+    execute "ln -s $HOME/.zprezto/runcoms/${file} ${HOME}/.${file}" "Link ${file}"
+  done
+  # ln -s ~/.zprezto/runcoms/zlogin ~/.zlogin
+  # ln -s ~/.zprezto/runcoms/zlogout ~/.zlogout
+  # ln -s ~/.zprezto/runcoms/zpreztorc ~/.zpreztorc
+  # ln -s ~/.zprezto/runcoms/zprofile ~/.zprofile
+  # ln -s ~/.zprezto/runcoms/zshenv ~/.zshenv
+  # ln -s ~/.zprezto/runcoms/zshrc ~/.zshrc
 else
   print_in_green "\n • Prezto already installed. Pulling latest changes from repository\n\n"
   git -C "$HOME/.zprezto" pull && git -C "$HOME/.zprezto" submodule update --init --recursive &> /dev/null/

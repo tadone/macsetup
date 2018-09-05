@@ -28,6 +28,16 @@ brew_install "Tree" "tree"
 brew_install "tldr" "tldr"
 brew_install "Nmap" "nmap"
 brew_install "reattach-to-user-namespace" "reattach-to-user-namespace"
+brew_install "GPG" "gpg"
+brew_install "Bat (Cat Replacement)" "bat"
+brew_install "Noti (Notification)" "noti"
+
+# Work Stuff
+brew_install "MiniKube" "minikube"
+brew_install "AWS Cli" "awscli"
+brew_install "Azure CLI" "azure-cli"
+brew_install "Kubernetes CLI" "kubernetes-cli"
+brew_install "kubectx" "kubectx"
 
 # Install Mac App Store (mas) command line tool
 brew_install "Mas" "mas"
@@ -71,6 +81,7 @@ brew_install "Quick Look: Image Size" "qlimagesize" "caskroom/cask" "cask"
 # Install Mac App Store Apps via mas
 # https://libraries.io/homebrew/mas
 print_in_purple "\n • Installing Apps with <mas>\n\n"
+mas signin tadone@gmail.com
 mas_install "Magnet" "441258766"
 mas_install "Enpass" "732710998"
 mas_install "MenuBar Stats" "714196447"
