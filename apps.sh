@@ -35,6 +35,7 @@ brew_install "Diff so fancy" "diff-so-fancy"
 brew_install "FD - Find Replacement" "fd"
 brew_install "JQ - JSON Query Tool" "jq"
 brew_install "MyCLI - SQL Tool" "jq"
+brew_install "Google SDK" "google-cloud-sdk"
 
 # Work Stuff
 brew_install "MiniKube" "minikube"
