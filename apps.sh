@@ -89,6 +89,7 @@ brew_install "Quick Look: Image Size" "qlimagesize" "caskroom/cask" "cask"
 print_in_purple "\n • Installing Apps with <mas>\n\n"
 mas signin tadone@gmail.com
 mas_install "Magnet" "441258766"
+mas_install "SnippetsLab" "1006087419"
 #mas_install "Enpass" "732710998"
 mas_install "MenuBar Stats" "714196447"
 mas_install "Unsplash Wallpapers" "1284863847"
