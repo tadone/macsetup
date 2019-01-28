@@ -81,8 +81,6 @@ brew_install "Font: Roboto" "font-roboto-mono-for-powerline" "caskroom/fonts" "c
 brew_install "Font: Hack" "font-hack" "caskroom/fonts" "cask"
 # Quick Look Plugins
 brew_install "Quick Look: ZIP" "betterzipql" "caskroom/cask" "cask"
-brew_install "Quick Look: Image Size" "qlimagesize" "caskroom/cask" "cask"
-
 
 # Install Mac App Store Apps via mas
 # https://libraries.io/homebrew/mas
