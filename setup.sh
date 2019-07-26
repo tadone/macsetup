@@ -1,116 +1,156 @@
 #!/bin/bash
 
-export helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
-export dotfiles_dir="$HOME/Projects/dotfiles"
-export macsetup_dir="$HOME/Projects/macsetup"
-export the_user=$(whoami)
-
-# Prevent System Sleep
-/usr/bin/caffeinate -dimu -w $$ &
-
-# Helper Functions
-PURPLE=$(tput setaf 5)
-NORMALL=$(tput sgr0)
-printf "%b" "$PURPLE\n • Get file containing helper functions\n\n$NORMALL"
-curl --progress-bar $helper_url -o /tmp/helper.sh && . "/tmp/helper.sh" || exit
-
-# Ask for the administrator password upfront.
-ask_for_sudo
-#sudo -v <$ echo "$PASSWORD"
-
-# Install XCode Command Line Tools
-print_in_purple "\n • Installing XCODE\n\n"
-if ! xcode-select --print-path &> /dev/null; then
-  xcode-select --install &> /dev/null || exit
+if [[ -d $HOME'/Library/Mobile Documents/com~apple~CloudDocs' ]]; then
+  icloud_dir=$HOME'/Library/Mobile Documents/com~apple~CloudDocs'
 else
-  print_success "Xcode Command Line Tools Installed"
+  printf "%b" "$(tput setaf 3)\n   [?] iCloud directory not found$(tput sgr0)" 
 fi
 
-until [[ "xcode-select --print-path" ]]; do
-  sleep 5
-done
-
-# Install Homebrew & Update Homebrew
-print_in_purple "\n • Installing Homebrew\n\n"
-
-if ! cmd_exists "brew"; then
-  printf "\n" | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &> /dev/null
-        #  └─ simulate the ENTER keypress
+if [[ -d $icloud_dir/Dotfiles ]]; then
+  export helper_file="$icloud_dir/Code/macsetup/helper.sh" && source "$helper_file"
+  export macsetup_dir="$icloud_dir/Code/macsetup"
+  export dotfiles_dir="$icloud_dir/Dotfiles/"
 else
-  print_in_purple "\n • Updating Homebrew\n\n"
-  execute "brew update" "Homebrew Updated" && \
-  execute "brew upgrade" "Homebrew Upgraded"
+  printf "%b" "$(tput setaf 5)\n • Downloading helper file$(tput sgr0)"
+  helper_url="https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh"
+  curl --progress-bar $helper_url -o /tmp/helper.sh && source "/tmp/helper.sh" || { print_error "Could not download helper file. Aborting..."; exit 1; }
 fi
 
-# Install essentials with Homebrew
+prevent_sleep() {
+  # Prevent System Sleep
+  /usr/bin/caffeinate -dimu -w $$ &
+}
 
-brew_install "Git" "git"
-brew_install "ZSH" "zsh"
-brew_install "ZSH Completions" "zsh-completions"
+sudoers_add() {
+  /usr/bin/sudo -E -v || exit 1
+  USER_SUDOER="${USER} ALL=(ALL) NOPASSWD: ALL"
 
-# Change to ZSH
-print_in_purple "\n • Changing to ZSH\n\n"
+  print_in_purple "Adding $USER to /etc/sudoers for the duration of the script"
+  echo "${USER_SUDOER}" | /usr/bin/sudo -E -- /usr/bin/tee -a /etc/sudoers >/dev/null
+}
 
-brew_path=$(brew --prefix)
-zsh_path="$brew_path/bin/zsh"
+sudoers_remove() {
+  print_in_purple "Removing $USER from /etc/sudoers"
+  /usr/bin/sudo -E -- /usr/bin/sed -i '' "/^${USER_SUDOER}/d" /etc/sudoers
+}
 
-if ! grep "$zsh_path" < /etc/shells &> /dev/null; then
-  printf '%s\n' "$zsh_path" | sudo tee -a /etc/shells
-else
-  print_success "$zsh_path already exists in /etc/shells"
-fi
+xcode() {
+  # Install XCode Command Line Tools
+  print_in_purple "\n • Installing XCODE\n\n"
+  
+  if ! xcode-select --print-path &> /dev/null; then
+    xcode-select --install &> /dev/null || { print_error "Could not install XCode. Aborting..."; exit 1; }
+  else
+    print_success "Xcode Command Line Tools Installed"
+  fi
 
-sudo chsh -s "$zsh_path" "$the_user" &> /dev/null # Change default shell to ZSH
-
-# Install Prezto (ZSH configuration framework)
-print_in_purple "\n • Seting up Presto ZSH framework\n\n"
-if [[ ! -d "$HOME/.zprezto" ]]; then
-  git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
-  # Create links to zsh config files
-  ZFILES=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
-  for file in "${ZFILES[@]}";do
-    execute "ln -s $HOME/.zprezto/runcoms/${file} ${HOME}/.${file}" "Link ${file}"
+  until xcode-select --print-path; do
+    echo "Waiting for XCode to install..."
+    sleep 5
   done
-  # ln -s ~/.zprezto/runcoms/zlogin ~/.zlogin
-  # ln -s ~/.zprezto/runcoms/zlogout ~/.zlogout
-  # ln -s ~/.zprezto/runcoms/zpreztorc ~/.zpreztorc
-  # ln -s ~/.zprezto/runcoms/zprofile ~/.zprofile
-  # ln -s ~/.zprezto/runcoms/zshenv ~/.zshenv
-  # ln -s ~/.zprezto/runcoms/zshrc ~/.zshrc
-else
-  print_in_green "\n • Prezto already installed. Pulling latest changes from repository\n\n"
-  git -C "$HOME/.zprezto" pull && git -C "$HOME/.zprezto" submodule update --init --recursive &> /dev/null/
-  print_result $? "Presto update"
-fi
+}
+
+macos_defaults() {
+  # MacOS Defaults
+  if [[ -e "$macsetup_dir/macos.sh" ]]; then
+    "$macsetup_dir/macos.sh"
+  else
+    print_error "The macos.sh file not found. Aborting..."
+    exit 1
+  fi
+}
+
+homebrew() {
+  # Install Homebrew & Update Homebrew
+  print_in_purple "\n • Installing Homebrew\n\n"
+
+  if ! cmd_exists "brew"; then
+    printf "\n" | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &> /dev/null
+          #  └─ simulate the ENTER keypress
+  else
+    print_in_purple "\n • Updating Homebrew\n\n"
+    execute "brew update" "Homebrew Updated" && \
+    execute "brew upgrade" "Homebrew Upgraded"
+  fi
+}
+
+homebrew_apps() {
+  # Install Apps with Homebrew
+  if [[ -e "$macsetup_dir/apps.sh" ]]; then
+    "$macsetup_dir/apps.sh"
+  else
+    print_error "The apps.sh file not found. Aborting..."
+    exit 1    
+  fi
+}
+
+
+zsh_shell() {
+  # Change to ZSH
+  local brew_path=$(brew --prefix)
+  local zsh_path="$brew_path/bin/zsh"
+
+  if ! grep "$zsh_path" < /etc/shells &> /dev/null; then
+    print_in_purple "\n • Adding ZSH to /etc/shells\n\n"
+    printf '%s\n' "$zsh_path" | sudo tee -a /etc/shells
+  else
+    print_success "$zsh_path already exists in /etc/shells"
+  fi
+  print_in_purple "\n • Changing ${USER}'s default shell to ZSH\n\n"
+  sudo chsh -s "$zsh_path" "${USER}" &> /dev/null # Change default shell to ZSH
+}
+
+prezto() {
+  # Install Prezto (ZSH configuration framework)
+  print_in_purple "\n • Seting up Presto ZSH framework\n\n"
+  if [[ ! -d "$HOME/.zprezto" ]]; then
+    git clone --recursive https://github.com/sorin-ionescu/prezto.git "${ZDOTDIR:-$HOME}/.zprezto"
+    # Create links to zsh config files
+    ZFILES=(zlogin zlogout zpreztorc zprofile zshenv zshrc)
+    for file in "${ZFILES[@]}";do
+      execute "ln -s $HOME/.zprezto/runcoms/${file} ${HOME}/.${file}" "Link ${file}"
+    done
+  else
+    print_in_green "\n • Prezto already installed. Pulling latest changes from repository\n\n"
+    git -C "$HOME/.zprezto" pull && git -C "$HOME/.zprezto" submodule update --init --recursive &> /dev/null/
+    print_result $? "Presto update"
+  fi  
+}
+
+link_dotfiles() {
+  # Create Links from dotfiles
+  print_in_purple "\n • Linking dotfiles\n\n"
+
+  execute 'ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"' "Linked vimrc-mac"
+  execute 'ln -sf "$dotfiles_dir/zpreztorc" "$HOME/.zshrc"' "Linked zpreztorc"
+  execute 'ln -sf "$dotfiles_dir/pure.zsh" "$HOME/.zprezto/modules/prompt/external/pure/pure.zsh"' "Linked pure.zsh"
+  execute 'ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"' "Linked zshrc"
+  execute 'ln -sf "$dotfiles_dir/ssh_config" "$HOME/.ssh/config"' "Linked zshrc"
+}
 
 # Clone dotfiles & macsetup
 print_in_purple "\n • Cloning Git dotfiles & macsetup\n\n"
 git_clone "https://github.com/tadone/dotfiles" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
 git_clone "https://github.com/tadone/macsetup" "$macsetup_dir" "Macsetup cloned to $macsetup_dir"
 
-# Install Apps with Homebrew
-if [[ -e "$macsetup_dir/apps.sh" ]]; then
-  "$zsh_path" "$macsetup_dir/apps.sh" || exit
-else
-  print_error "Can't access apps.sh"
-  exit
-fi
 
-# MacOS Defaults
-if [[ -e "$macsetup_dir/macos.sh" ]]; then
-  "$zsh_path" "$macsetup_dir/macos.sh" || exit
-else
-  print_error "Can't access macos.sh"
-  exit
-fi
-# Install Atom packages with apm
-apm install --packages-file "$dotfiles_dir/work-package-list.txt"
-# Create Links from dotfiles
-print_in_purple "\n • Linking from dotfiles\n\n"
-execute 'ln -sf "$dotfiles_dir/vimrc-mac" "$HOME/.vimrc"' "Linked vimrc-mac"
-execute 'ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"' "Linked zshrc"
 # Docker completion for Prezto ZSH
 execute 'curl -fLo ~/.zprezto/modules/completion/external/src/_docker \
   https://raw.github.com/felixr/docker-zsh-completion/master/_docker'
 
+### MAIN ###
+
+# Ask for the administrator password upfront.
+prevent_sleep
+sudoers_add
+xcode
+macos_defaults
+homebrew
+homebrew_apps
+zsh_shell
+prezto
+link_dotfiles
+sudoers_remove
+
+# Done
 print_in_green "\n • Finished!!!\n\n"
