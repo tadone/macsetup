@@ -1,12 +1,15 @@
 #!/bin/bash
 source "$helper_file"
 
+# Trap Ctrl-C
+trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
+
 execute "defaults write com.apple.dashboard mcx-disabled -bool true" \
     "Disable Dashboard"
 
-print_in_purple "\n   Dock\n\n"
+print_in_purple "\n   Dock\n"
 
-execute "defaults write com.apple.dock autohide -bool true" \
+execute "defaults write com.apple.dock autohide -bool false" \
     "Automatically hide/show the Dock"
 
 execute "defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true" \
@@ -34,20 +37,20 @@ execute "defaults write com.apple.dock mru-spaces -bool false" \
 execute "defaults write com.apple.dock show-process-indicators -bool true" \
     "Show indicator lights for open applications"
 
-execute "defaults write com.apple.dock tilesize -int 32" \
-    "Set dock icon sizeto 32px"
+execute "defaults write com.apple.dock tilesize -int 42" \
+    "Set dock icon sizeto 42px"
 
 execute "defaults write com.apple.dock 'magnification' -bool true" \
     "Enable magnification"
 
-execute "defaults write com.apple.dock 'largesize' -int 48" \
-    "Set magnified dock size to 48px"
+execute "defaults write com.apple.dock 'largesize' -int 52" \
+    "Set magnified dock size to 52px"
 
 killall "Dock" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Finder\n\n"
+print_in_purple "\n   Finder\n"
 
 execute "defaults write com.apple.frameworks.diskimages auto-open-ro-root -bool true && \
          defaults write com.apple.frameworks.diskimages auto-open-rw-root -bool true && \
@@ -121,7 +124,7 @@ killall "cfprefsd" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Keyboard\n\n"
+print_in_purple "\n   Keyboard\n"
 
 execute "defaults write -g AppleKeyboardUIMode -int 3" \
     "Enable full keyboard access for all controls"
@@ -143,7 +146,7 @@ execute "defaults write -g NSAutomaticDashSubstitutionEnabled -bool false" \
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Language & Region\n\n"
+print_in_purple "\n   Language & Region\n"
 
 execute "defaults write -g AppleLanguages -array 'en'" \
     "Set language"
@@ -153,7 +156,7 @@ execute "defaults write -g AppleMeasurementUnits -string 'Centimeters'" \
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Photos\n\n"
+print_in_purple "\n   Photos\n"
 
 execute "defaults -currentHost write com.apple.ImageCapture disableHotPlug -bool true" \
     "Prevent Photos from opening automatically when devices are plugged in"
@@ -162,7 +165,7 @@ killall "Photos" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Safari\n\n"
+print_in_purple "\n   Safari\n"
 
 execute "defaults write com.apple.Safari AutoOpenSafeDownloads -bool false" \
     "Disable opening 'safe' files automatically"
@@ -190,7 +193,7 @@ killall "Safari" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Trackpad\n\n"
+print_in_purple "\n   Trackpad\n"
 
 execute "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true && \
          defaults write com.apple.AppleMultitouchTrackpad Clicking -int 1 && \
@@ -208,7 +211,7 @@ execute "defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Track
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   UI & UX\n\n"
+print_in_purple "\n   UI & UX\n"
 
 # execute "defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false" \
 #     "Disable “natural” (Lion-style) scrolling"
@@ -287,7 +290,7 @@ killall "SystemUIServer" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-print_in_purple "\n   Spotlight Preferences\n\n"
+# print_in_purple "\n   Spotlight Preferences\n"
 
 defaults write com.apple.spotlight orderedItems -array \
     '{"enabled" = 1;"name" = "APPLICATIONS";}' \

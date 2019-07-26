@@ -1,13 +1,16 @@
 #!/bin/bash
 source "$helper_file"
 
+# Trap Ctrl-C
+trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
+
 # Install rest of Homebrew packages (Non-GUI)
-print_in_purple "\n • Installing Essentials\n\n"
+print_in_purple "\n • Installing Essentials\n"
 brew_install "Git" "git"
 brew_install "ZSH" "zsh"
 brew_install "ZSH Completions" "zsh-completions"
 
-print_in_purple "\n • Installing Homebrew Apps\n\n"
+print_in_purple "\n • Installing Homebrew Apps\n"
 brew_install "GNU Tools" "coreutils"
 brew_install "Python 3" "python3"
 brew_install "Find Utils" "findutils"
@@ -40,17 +43,17 @@ brew_install "FD - Find Replacement" "fd"
 brew_install "JQ - JSON Query Tool" "jq"
 brew_install "MyCLI - SQL Tool" "jq"
 
-print_in_purple "\n • Installing Cloud Providers\n\n"
-brew_install "Google SDK" "google-cloud-sdk"
+print_in_purple "\n • Installing Cloud Providers\n"
+# brew_install "Google SDK" "google-cloud-sdk"
 # brew_install "MiniKube" "minikube"
 brew_install "AWS Cli" "awscli"
 brew_install "Azure CLI" "azure-cli"
 brew_install "Kubernetes CLI" "kubernetes-cli"
 brew_install "kubectx" "kubectx"
-brew_install "Stern" "stern"
-brew_install "Kubespy" "kubespy"
+# brew_install "Stern" "stern"
+# brew_install "Kubespy" "kubespy"
 
-print_in_purple "\n • Installing Applications\n\n"
+print_in_purple "\n • Installing Applications\n"
 # GUI Tools
 brew_install "iTerm2" "iterm2" "caskroom/versions" "cask"
 brew_install "Hyper" "Hyper" "caskroom/cask" "cask"
@@ -89,7 +92,7 @@ brew_install "Font: Hack" "font-hack" "caskroom/fonts" "cask"
 # Quick Look Plugins
 # brew_install "Quick Look: ZIP" "betterzipql" "caskroom/cask" "cask"
 
-print_in_purple "\n • Installing Apps with <mas>\n\n"
+print_in_purple "\n • Installing Apps with <mas>\n"
 # Install Mac App Store (mas) command line tool
 brew_install "Mas" "mas"
 # Install Mac App Store Apps via mas
