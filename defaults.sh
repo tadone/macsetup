@@ -4,13 +4,23 @@ source "$helper_file"
 # Trap Ctrl-C
 trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
 
+print_in_purple "\n   General\n"
+
+execute 'defaults write com.apple.assistant.support "Assistant Enabled" -boolean false' \
+    "Disable Siri"
+execute "defaults write com.apple.DiskUtility SidebarShowAllDevices -bool true" \
+    "Show all disk devices"
+
 execute "defaults write com.apple.dashboard mcx-disabled -bool true" \
     "Disable Dashboard"
 
 print_in_purple "\n   Dock\n"
 
+execute 'defaults write com.apple.dock orientation -string "left"' \
+    "Move dock to Left of screen"
+
 execute "defaults write com.apple.dock autohide -bool false" \
-    "Automatically hide/show the Dock"
+    "Automatically hide/show the Dock - Disable"
 
 execute "defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true" \
     "Enable spring loading for all Dock items"
@@ -286,6 +296,9 @@ execute "sudo systemsetup -setrestartfreeze on" \
 #         " \
 #     "Hide Time Machine and Volume icons from the menu bar"
 
+execute 'defaults write com.apple.menuextra.battery ShowPercent -string "YES"' \
+    "Show battery percentage in menu bar"
+
 killall "SystemUIServer" &> /dev/null
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -315,6 +328,12 @@ defaults write com.apple.spotlight orderedItems -array \
     '{"enabled" = 0;"name" = "MENU_EXPRESSION";}' \
     '{"enabled" = 0;"name" = "MENU_WEBSEARCH";}' \
     '{"enabled" = 0;"name" = "MENU_SPOTLIGHT_SUGGESTIONS";}'
+
+print_in_purple "\n   Gatekeeper\n"
+# using a gatekeeper whitelist
+#sudo spctl --add --label "GitHub" /Applications/GitHub.app
+#spctl --enable --label "GitHub"
+#spctl --disable --label "GitHub"    
 
 killall mds > /dev/null 2>&1 # Load new settings before rebuilding the index
 mdutil -i on / > /dev/null # Make sure indexing is enabled for the main volume

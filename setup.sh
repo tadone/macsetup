@@ -102,6 +102,7 @@ homebrew() {
 
 homebrew_apps() {
   # Install Apps with Homebrew
+  print_in_purple "\n • Installing Apps with Homebrew & Mas"
   if [[ -e "$macsetup_dir/apps.sh" ]]; then
     bash "$macsetup_dir/apps.sh"
   else
@@ -116,14 +117,14 @@ zsh_shell() {
   local brew_path=$(brew --prefix)
   local zsh_path="$brew_path/bin/zsh"
 
+  print_in_purple "\n • Adding ZSH to /etc/shells\n"
   if ! grep "$zsh_path" < /etc/shells &> /dev/null; then
-    print_in_purple "\n • Adding ZSH to /etc/shells\n"
     printf '%s\n' "$zsh_path" | sudo tee -a /etc/shells
   else
-    print_success "$zsh_path already exists in /etc/shells"
+    print_success "ZSH already exists in /etc/shells"
   fi
   print_in_purple "\n • Changing ${USER}'s default shell to ZSH\n"
-  sudo chsh -s "$zsh_path" "${USER}" &> /dev/null # Change default shell to ZSH
+  execute "sudo chsh -s $zsh_path ${USER} &> /dev/null" "Default shell changed to ZSH" # Change default shell to ZSH
 }
 
 prezto() {
@@ -138,12 +139,13 @@ prezto() {
     done
   else
     print_in_green "\n • Prezto already installed. Pulling latest changes from repository\n"
-    git -C "$HOME/.zprezto" pull && git -C "$HOME/.zprezto" submodule update --init --recursive &> /dev/null/
-    print_result $? "Presto update"
+    execute 'git -C "$HOME/.zprezto" pull --quiet' "Git pull"
+    execute 'git -C "$HOME/.zprezto" submodule update --init --recursive --quiet' "Git submodule update"
+    # print_result $? "Presto update"
   fi
   # Docker completion for Prezto ZSH  
   execute 'curl -fLo ~/.zprezto/modules/completion/external/src/_docker \
-    https://raw.github.com/felixr/docker-zsh-completion/master/_docker'
+    https://raw.github.com/felixr/docker-zsh-completion/master/_docker' "Pull docker completions"
 }
 
 clone_dotfiles() {
@@ -162,6 +164,19 @@ link_dotfiles() {
   execute 'ln -sf "$dotfiles_dir/ssh_config" "$HOME/.ssh/config"' "Linked zshrc"
 }
 
+vscode_setup() {
+  print_in_purple "\n • Setting up VS Code\n"
+  if hash code; then
+    for line in $(cat "${dotfiles_dir}"/vscode_extensions.txt | grep -v '^#'); do 
+      execute "code --install-extension $line" "Extension: $line"
+    done
+    echo ""
+    execute 'ln -sf "$dotfiles_dir/vscode_settings.json" "$HOME/Library/Application Support/Code/User/settings.json"' "Linked VS Codes settings.json"
+  else
+    print_in_green "Visual Studio Code not installed. Skipping..."
+  fi    
+}
+
 ### MAIN ###
 # Trap Ctrl-C
 trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
@@ -178,8 +193,9 @@ homebrew
 homebrew_apps
 zsh_shell
 prezto
-[ ! -d "$dotfiles" ] && clone_dotfiles
+[ ! -d "$dotfiles_dir" ] && clone_dotfiles
 link_dotfiles
+vscode_setup
 sudoers_remove
 
 # Done

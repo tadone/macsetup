@@ -5,12 +5,12 @@ source "$helper_file"
 trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
 
 # Install rest of Homebrew packages (Non-GUI)
-print_in_purple "\n • Installing Essentials\n"
+print_in_purple "\n   Installing Essentials\n"
 brew_install "Git" "git"
 brew_install "ZSH" "zsh"
 brew_install "ZSH Completions" "zsh-completions"
 
-print_in_purple "\n • Installing Homebrew Apps\n"
+print_in_purple "\n   Installing Homebrew Apps\n"
 brew_install "GNU Tools" "coreutils"
 brew_install "Python 3" "python3"
 brew_install "Find Utils" "findutils"
@@ -19,7 +19,8 @@ brew_install "curl" "curl"
 brew_install "HTTPie" "httpie"
 #brew_install "AWS Shell" "aws-shell"
 brew_install "ShellCheck" "shellcheck"
-brew_install "Vim" "vim --with-override-system-vi --with-lua"
+brew_install "Vim" "vim"
+brew_install "KAK" "kakoune"
 brew_install "Youtube DL" "youtube-dl"
 # brew_install "Htop" "htop-osx"
 brew_install "Wget" "wget"
@@ -43,7 +44,7 @@ brew_install "FD - Find Replacement" "fd"
 brew_install "JQ - JSON Query Tool" "jq"
 brew_install "MyCLI - SQL Tool" "jq"
 
-print_in_purple "\n • Installing Cloud Providers\n"
+print_in_purple "\n   Installing Cloud Providers\n"
 # brew_install "Google SDK" "google-cloud-sdk"
 # brew_install "MiniKube" "minikube"
 brew_install "AWS Cli" "awscli"
@@ -53,13 +54,14 @@ brew_install "kubectx" "kubectx"
 # brew_install "Stern" "stern"
 # brew_install "Kubespy" "kubespy"
 
-print_in_purple "\n • Installing Applications\n"
+print_in_purple "\n   Installing Applications\n"
 # GUI Tools
 brew_install "iTerm2" "iterm2" "caskroom/versions" "cask"
 brew_install "Hyper" "Hyper" "caskroom/cask" "cask"
 brew_install "Chrome" "google-chrome" "caskroom/cask" "cask"
 brew_install "Firefox" "firefox" "caskroom/cask" "cask"
 brew_install "YakYak" "yakyak" "caskroom/cask" "cask"
+brew_install "VS Code" "visual-studio-code" "caskroom/cask" "cask"
 #brew_install "Atom" "atom" "caskroom/cask" "cask"
 #brew_install "Slack" "slack" "caskroom/cask" "cask"
 brew_install "Etcher" "etcher" "caskroom/cask" "cask"
@@ -86,18 +88,18 @@ brew_install "iiNA" "iina" "caskroom/cask" "cask"
 # brew_install "Font: Inconsolata-DZ" "font-inconsolata-dz" "caskroom/fonts" "cask"
 # brew_install "Font: Inconsolata-G" "font-inconsolata-g-for-powerline" "caskroom/fonts" "cask"
 #brew_install "Font: Source Code Pro" "font-source-code-pro" "caskroom/fonts"
-brew_install "Font: Fira Mono" "font-fira-mono" "caskroom/fonts" "cask"
-brew_install "Font: Roboto" "font-roboto-mono-for-powerline" "caskroom/fonts" "cask"
-brew_install "Font: Hack" "font-hack" "caskroom/fonts" "cask"
+# brew_install "Font: Fira Mono" "font-fira-mono" "caskroom/fonts" "cask"
+# brew_install "Font: Roboto" "font-roboto-mono-for-powerline" "caskroom/fonts" "cask"
+# brew_install "Font: Hack" "font-hack" "caskroom/fonts" "cask"
 # Quick Look Plugins
 # brew_install "Quick Look: ZIP" "betterzipql" "caskroom/cask" "cask"
 
-print_in_purple "\n • Installing Apps with <mas>\n"
+print_in_purple "\n   Installing Apps with <mas>\n"
 # Install Mac App Store (mas) command line tool
 brew_install "Mas" "mas"
 # Install Mac App Store Apps via mas
 # https://libraries.io/homebrew/mas
-mas signin tadone@gmail.com
+# mas signin tadone@gmail.com
 
 mas_install "Magnet" "441258766"
 mas_install "SnippetsLab" "1006087419"
