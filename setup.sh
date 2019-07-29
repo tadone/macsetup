@@ -162,6 +162,7 @@ link_dotfiles() {
   execute 'ln -sf "$dotfiles_dir/pure.zsh" "$HOME/.zprezto/modules/prompt/external/pure/pure.zsh"' "Linked pure.zsh"
   execute 'ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"' "Linked zshrc"
   execute 'ln -sf "$dotfiles_dir/ssh_config" "$HOME/.ssh/config"' "Linked zshrc"
+  execute 'ln -sf "$dotfiles_dir/gitconfig" "$HOME/.gitconfig"' "Linked gitconfig"
 }
 
 vscode_setup() {
