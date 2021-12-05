@@ -205,7 +205,7 @@ trap 'trap "" INT; echo -e "${YELLOW}Aborting...${RESET}"; exit 1' INT
 intro
 sudoers_add
 prevent_sleep
-default_dirs
+# default_dirs
 # macsetup_check
 xcode
 osx_settings
