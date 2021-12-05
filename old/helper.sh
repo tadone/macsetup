@@ -374,15 +374,15 @@ brew_install() {
 
     declare -r FORMULA_READABLE_NAME="$1" # Brew name to print
     declare -r FORMULA="$2" # Brew formula name
-    declare -r TAP_VALUE="$3" # Brew Repository (Caskroom/Cask)
-    declare -r CASK="$4" # Use Caskroom to intall GUI tools
+    #declare -r TAP_VALUE="$3" # Brew Repository (Caskroom/Cask)
+    #declare -r CASK="$4" # Use Caskroom to intall GUI tools
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
     # Check if `Homebrew` is installed.
 
     if ! cmd_exists "brew"; then
-        print_error "$FORMULA_READABLE_NAME ('Homebrew' is not installed)"
+        print_error "$FORMULA_READABLE_NAME" "Homebrew' is not installed"
         return 1
     fi
 
@@ -391,20 +391,20 @@ brew_install() {
     # If `brew tap` needs to be executed,
     # check if it executed correctly.
 
-    if [ -n "$TAP_VALUE" ]; then
-        if ! brew_tap "$TAP_VALUE"; then
-            print_error "$FORMULA_READABLE_NAME ('brew tap $TAP_VALUE' failed)"
-            return 1
-        fi
-    fi
+    #if [ -n "$TAP_VALUE" ]; then
+    #    if ! brew_tap "$TAP_VALUE"; then
+    #        print_error "$FORMULA_READABLE_NAME ('brew tap $TAP_VALUE' failed)"
+    #        return 1
+    #    fi
+    #fi
 
     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     # Install the specified formula.
-    if brew $CASK list "$FORMULA" &> /dev/null; then
+    if brew list "$FORMULA" &> /dev/null; then
         print_success "$FORMULA_READABLE_NAME"
     else
         execute \
-            "brew $CASK install $FORMULA" "$FORMULA_READABLE_NAME"
+            "brew install $FORMULA" "$FORMULA_READABLE_NAME"
     fi
 
 }

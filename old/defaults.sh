@@ -1,6 +1,8 @@
 #!/bin/bash
-source "$helper_file"
-
+# source "$helper_file"
+# source helper.sh
+MYDIR=$(dirname "$0")
+source "$MYDIR/helper.sh" || exit 1
 # Trap Ctrl-C
 trap 'trap "" INT; print_error "Aborting..."; exit 1' INT
 
@@ -91,6 +93,8 @@ execute "defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool t
          defaults write com.apple.finder ShowMountedServersOnDesktop -bool true && \
          defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true" \
     "Show icons for hard drives, servers, and removable media on the desktop"
+
+execute "defaults write com.apple.LaunchServices LSQuarantine -bool false" "Disable the 'Are you sure you want to open this application?' dialog"
 
 # execute "defaults write com.apple.finder ShowRecentTags -bool false" \
 #     "Do not show recent tags"
@@ -331,10 +335,11 @@ defaults write com.apple.spotlight orderedItems -array \
 
 print_in_purple "\n   Gatekeeper\n"
 # using a gatekeeper whitelist
-#sudo spctl --add --label "GitHub" /Applications/GitHub.app
-#spctl --enable --label "GitHub"
+# sudo spctl --add --label "YakYak" /Applications/YakYak.app
+# spctl --enable --label "YakYak"
 #spctl --disable --label "GitHub"    
+#sudo spctl --master-disable
 
-killall mds > /dev/null 2>&1 # Load new settings before rebuilding the index
-mdutil -i on / > /dev/null # Make sure indexing is enabled for the main volume
-mdutil -E / > /dev/null # Rebuild the index from scratch
+#killall mds # Load new settings before rebuilding the index
+#mdutil -i on / # Make sure indexing is enabled for the main volume
+#mdutil -E / # Rebuild the index from scratch
