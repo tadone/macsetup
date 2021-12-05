@@ -411,8 +411,7 @@ for app in "Activity Monitor" \
 	"Finder" \
 	"Google Chrome" \
 	"Messages" \
-	"SystemUIServer" \
-	"Terminal"; do
+	"SystemUIServer"; do
 	killall "${app}" &> /dev/null
 done
 
