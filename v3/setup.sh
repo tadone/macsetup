@@ -159,11 +159,16 @@ prezto() {
   echo -e "${GREEN} - Downloading docker zsh completions${RESET}"
   curl -fsSLo ~/.zprezto/modules/completion/external/src/_docker \
     https://raw.github.com/felixr/docker-zsh-completion/master/_docker
+
+  # FZF Git
+  if [[ ! -f "$HOME/.fzf-git.sh" ]]; then
+    curl --progress-bar "https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh" -o "$HOME/.fzf-git.sh"
+  fi
 }
 
 clone_dotfiles() {
   print_in_purple "\n • Cloning dotfiles\n"
-  export DOTFILES="$HOME/dotfiles"
+  export DOTFILES="$HOME/Code/dotfiles"
 
   if [[ ! -d "$DOTFILES" ]]; then
     mkdir -p "$DOTFILES"
