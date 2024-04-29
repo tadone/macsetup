@@ -112,6 +112,9 @@ homebrew_apps() {
       echo -e "${GREEN}Installing Homebrew Apps${RESET}"
       brew bundle
     fi
+  else
+    echo -e "${YELLOW}Homebrew not installed. Exiting...${RESET}"
+    exit 1
   fi
 }
 
