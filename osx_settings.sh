@@ -76,9 +76,9 @@ defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
 echo "Setting trackpad and input options"
 # Trackpad: enable tap to click for this user and for the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+# defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+# defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+# defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # Enable full keyboard access for all controls
 # (e.g. enable Tab in modal dialogs)
@@ -270,9 +270,6 @@ defaults write com.apple.dock autohide -bool true
 # Don’t show recent applications in Dock
 defaults write com.apple.dock show-recents -bool false
 
-# Reset Launchpad, but keep the desktop wallpaper intact
-find "${HOME}/Library/Application Support/Dock" -name "*-*.db" -maxdepth 1 -delete
-
 # Hot corners
 # Possible values:
 #  0: no-op
@@ -404,7 +401,7 @@ echo " - Disable Gatekeeper"
 # Disable Gatekeeper
 sudo spctl --master-disable
 
-set -x
+# set -x
 echo "Restarting systems"
 for app in "Activity Monitor" \
 	"Dock" \
@@ -415,4 +412,4 @@ for app in "Activity Monitor" \
 	killall "${app}" &> /dev/null
 done
 
-set +x
+# set +x

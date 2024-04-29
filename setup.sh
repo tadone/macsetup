@@ -108,10 +108,15 @@ homebrew() {
 homebrew_apps() {
   # Install brew apps
   if hash "brew"; then
+
     if [ -f "/tmp/Brewfile" ]; then
       echo -e "${GREEN}Installing Homebrew Apps${RESET}"
-      brew bundle
+      brew bundle --file "/tmp/Brewfile"
+    else
+      echo -e "${YELLOW}Brewfile not found. Exiting...${RESET}"
+      exit 1
     fi
+
   else
     echo -e "${YELLOW}Homebrew not installed. Exiting...${RESET}"
     exit 1
