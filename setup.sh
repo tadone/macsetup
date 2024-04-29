@@ -18,10 +18,12 @@ intro()  {
   echo -e "\n${MAGENTA}MacOS $version Setup Script${RESET}"
 }
 
-macsetup() {
-  curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/setup.sh" -o "/tmp/setup.sh"
-
+macsetup_files() {
+  echo -e "${GREEN}Downloading setup files to /tmp\n${RESET}"
+  curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/osx_settings.sh" -o "/tmp/osx_settings.sh"
+  curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/Brewfile" -o "/tmp/Brewfile"
 }
+
 # macsetup_check() {
 #   # Check for MacSetup Directoriy
 #   if [[ -d $SCRIPT_DIR ]]; then
@@ -208,6 +210,7 @@ trap 'trap "" INT; echo -e "${YELLOW}Aborting...${RESET}"; exit 1' INT
 intro
 sudoers_add
 prevent_sleep
+macsetup_files
 # default_dirs
 # macsetup_check
 xcode
