@@ -108,7 +108,7 @@ homebrew() {
 homebrew_apps() {
   # Install brew apps
   if hash "brew"; then
-    if [ -f Brewfile ]; then
+    if [ -f "/tmp/Brewfile" ]; then
       echo -e "${GREEN}Installing Homebrew Apps${RESET}"
       brew bundle
     fi
