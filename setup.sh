@@ -91,19 +91,27 @@ osx_settings() {
 
 homebrew() {
   if ! hash "brew"; then
-    # Install Homebrew & Update Homebrew
+
+    # Install Homebrew
     echo -e "${GREEN}Installing Homebrew${RESET}"
-    homebrew_dir="/usr/local"
-    if [ ! -d "$homebrew_dir" ]; then mkdir /usr/local; fi
-      bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        # Install brew apps
-        if [ -f Brewfile ]; then
-          echo -e "${GREEN}Installing Homebrew Apps${RESET}"
-          brew bundle
-        fi
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+    # Set path
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+
   else
     echo -e "${GREEN}Upgrading Homebrew Apps${RESET}"
     brew upgrade
+  fi
+}
+
+homebrew_apps() {
+  # Install brew apps
+  if hash "brew"; then
+    if [ -f Brewfile ]; then
+      echo -e "${GREEN}Installing Homebrew Apps${RESET}"
+      brew bundle
+    fi
   fi
 }
 
@@ -216,6 +224,7 @@ macsetup_files
 xcode
 osx_settings
 homebrew
+homebrew_apps
 # mas_app_store_apps
 zsh_shell
 prezto
