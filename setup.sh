@@ -9,39 +9,32 @@ YELLOW=$(tput setaf 3)
 MAGENTA=$(tput setaf 5)
 RESET=$(tput sgr0)
 
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+DOTFILES="$HOME/Code/dotfiles"
+MACSETUP="$HOME/Code/macsetup"
+
 intro()  {
   version="$(sw_vers -productVersion)"
   echo -e "\n${MAGENTA}MacOS $version Setup Script${RESET}"
 }
 
-default_dirs() {
-  # Check for iCloud Directory
-  if [[ -d $HOME'/Library/Mobile Documents/com~apple~CloudDocs' ]]; then
-    base_dir=$HOME'/Library/Mobile Documents/com~apple~CloudDocs'
-    # Set default dirs/files
-    export dotfiles_dir="$base_dir/Dotfiles"
-    export macsetup_dir="$base_dir/Code/macsetup/v2"
-    # export helper_file="$base_dir/Code/macsetup/helper.sh"
-  
-  else
-    echo -e "${YELLOW}This script is meant for OSX with iCloud. Aborting...${RESET}"
-    exit 1
-  fi
-}
+macsetup() {
+  curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/setup.sh" -o "/tmp/setup.sh"
 
+}
 # macsetup_check() {
 #   # Check for MacSetup Directoriy
-#   if [[ -d $macsetup_dir ]]; then
+#   if [[ -d $SCRIPT_DIR ]]; then
 #     printf "%b" "$(tput setaf 5) • Using helper script from iCloud directory\n$(tput sgr0)"
 #     # Source helper.sh
 #     source "$helper_file" || { printf "%b" "$(tput setaf 1)\n[✖] Could not source helper file. Aborting..."; exit 1; }
 #   else
 #     printf "%b" "$(tput setaf 5)\n • Downloading helper file$(tput sgr0)"
-#     mkd "$macsetup_dir"
+#     mkd "$SCRIPT_DIR"
 #     # Download macsetup files from git
-#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh" -o "$macsetup_dir/helper.sh"
-#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/defaults.sh" -o "$macsetup_dir/defaults.sh"
-#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/apps.sh" -o "$macsetup_dir/apps.sh"
+#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/helper.sh" -o "$SCRIPT_DIR/helper.sh"
+#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/defaults.sh" -o "$SCRIPT_DIR/defaults.sh"
+#     curl --progress-bar "https://raw.githubusercontent.com/tadone/macsetup/master/apps.sh" -o "$SCRIPT_DIR/apps.sh"
 #     # Source helper.sh
 #     source "$helper_file" || { printf "%b" "$(tput setaf 1)\n[✖] Could not source helper file. Aborting..."; exit 1; }
 #   fi
@@ -56,28 +49,28 @@ sudoers_add() {
   echo -e "${GREEN}Adding $USER to /etc/sudoers for the duration of the script\n${RESET}"
   # Ensure sudo
   /usr/bin/sudo -v || exit 1
-  
+
   USER_SUDOER="${USER} ALL=(ALL) NOPASSWD: ALL"
   echo "${USER_SUDOER}" | /usr/bin/sudo -E -- /usr/bin/tee -a /etc/sudoers >/dev/null
 }
 
-sudoers_remove() {
-  echo -e "${GREEN}Removing $USER from /etc/sudoers\n${RESET}"
-  /usr/bin/sudo -E -- /usr/bin/sed -i '' "/^${USER_SUDOER}/d" /etc/sudoers
-}
+# sudoers_remove() {
+#   echo -e "${GREEN}Removing $USER from /etc/sudoers\n${RESET}"
+#   /usr/bin/sudo -E -- /usr/bin/sed -i '' "/^${USER_SUDOER}/d" /etc/sudoers
+# }
 
 xcode() {
   # Install XCode Command Line Tools
   echo -e "${GREEN}Installing XCODE${RESET}"
-  
+
   if ! xcode-select --print-path &> /dev/null; then
     xcode-select --install &> /dev/null || { echo -e "${YELLOW}Could not install XCode. Aborting...${RESET}"; exit 1; }
-    
+
     until xcode-select --print-path &> /dev/null; do
       echo "Waiting for XCode to install..."
       sleep 5
-    done    
-  
+    done
+
   else
     echo -e "${GREEN} - Xcode Command Line Tools Installed${RESET}"
   fi
@@ -85,9 +78,9 @@ xcode() {
 
 osx_settings() {
   # MacOS Defaults
-  if [[ -e "$macsetup_dir/osx_settings.sh" ]]; then
+  if [[ -e "$SCRIPT_DIR/osx_settings.sh" ]]; then
     echo -e "${GREEN}Setting OSX Defaults${RESET}"
-    bash "$macsetup_dir/osx_settings.sh"
+    bash "$SCRIPT_DIR/osx_settings.sh"
   else
     echo -e "${YELLOW}The osx_settings.sh file not found. Aborting..."
     exit 1
@@ -100,12 +93,12 @@ homebrew() {
     echo -e "${GREEN}Installing Homebrew${RESET}"
     homebrew_dir="/usr/local"
     if [ ! -d "$homebrew_dir" ]; then mkdir /usr/local; fi
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-      # Install brew apps
-      if [ -f Brewfile ]; then
-      echo -e "${GREEN}Installing Homebrew Apps${RESET}"
-      brew bundle
-      fi
+      bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        # Install brew apps
+        if [ -f Brewfile ]; then
+          echo -e "${GREEN}Installing Homebrew Apps${RESET}"
+          brew bundle
+        fi
   else
     echo -e "${GREEN}Upgrading Homebrew Apps${RESET}"
     brew upgrade
@@ -114,12 +107,12 @@ homebrew() {
 
 mas_app_store_apps() {
   if hash mas; then
-    mas install "441258766" # Magnet
+    # mas install "441258766" # Magnet
     mas install "1006087419" # SnippetsLab
     mas install "714196447" # MenuBar Stats
     # mas install "824183456" # Affinity Photo
-    mas install "443987910" # 1password
-    mas install "425955336" # Skitch
+    # mas install "443987910" # 1password
+    # mas install "425955336" # Skitch
   fi
 }
 
@@ -157,38 +150,55 @@ prezto() {
   echo -e "${GREEN} - Downloading docker zsh completions${RESET}"
   curl -fsSLo ~/.zprezto/modules/completion/external/src/_docker \
     https://raw.github.com/felixr/docker-zsh-completion/master/_docker
+
+  # FZF Git
+  if [[ ! -f "$HOME/.fzf-git.sh" ]]; then
+    curl --progress-bar "https://raw.githubusercontent.com/junegunn/fzf-git.sh/main/fzf-git.sh" -o "$HOME/.fzf-git.sh"
+  fi
 }
 
-# clone_dotfiles() {
-#   print_in_purple "\n • Cloning dotfiles\n"
-#   git_clone "https://github.com/tadone/dotfiles" "$dotfiles_dir" "Dotfiles cloned to $dotfiles_dir"
-# }
+clone_macsetup() {
+  print_in_purple "\n • Cloning macsetup\n"
+
+  if [[ ! -d "$MACSETUP" ]]; then
+    git clone "https://github.com/tadone/macsetup" "$MACSETUP"
+  fi
+}
+
+clone_dotfiles() {
+  print_in_purple "\n • Cloning dotfiles\n"
+
+  if [[ ! -d "$DOTFILES" ]]; then
+    git clone "https://github.com/tadone/dotfiles" "$DOTFILES"
+  fi
+}
 
 link_dotfiles() {
   # Create Links from dotfiles
   echo -e "${GREEN}Linking dotfiles${RESET}"
+  ln -sf "$DOTFILES/zpreztorc" "$HOME/.zpreztorc"
+  ln -sf "$DOTFILES/zshrc" "$HOME/.zshrc"
+  ln -sf "$DOTFILES/p10k.zsh" "$HOME/.p10k.zsh"
+  ln -sf "$DOTFILES/gitconfig" "$HOME/.gitconfig"
+  ln -sf "$DOTFILES/gitignore" "$HOME/.gitignore"
 
-  ln -sf "$dotfiles_dir/vimrc-new" "$HOME/.vimrc"
-  ln -sf "$dotfiles_dir/zpreztorc" "$HOME/.zpreztorc"
-  ln -sf "$dotfiles_dir/pure.zsh" "$HOME/.zprezto/modules/prompt/external/pure/pure.zsh"
-  ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"
-  if [ ! -d "$HOME/.ssh" ]; then mkd "$HOME/.ssh";fi
-  ln -sf "$dotfiles_dir/ssh_config" "$HOME/.ssh/config"
-  ln -sf "$dotfiles_dir/gitconfig" "$HOME/.gitconfig"
+  # Create SSH Directory
+  echo -e "${GREEN}Creating SSH Dir${RESET}"
+  if [ ! -d "$HOME/.ssh" ]; then mkdir -p "$HOME/.ssh"; fi
 }
 
-vscode_setup() {
-  print_in_purple "\n • Setting up VS Code\n"
-  if hash code; then
-    for line in $(cat "${dotfiles_dir}"/vscode_extensions.txt | grep -v '^#'); do 
-      execute "code --install-extension $line" "Extension: $line"
-    done
-    echo ""
-    execute 'ln -sf "$dotfiles_dir/vscode_settings.json" "$HOME/Library/Application Support/Code/User/settings.json"' "Linked VS Codes settings.json"
-  else
-    print_in_green "Visual Studio Code not installed. Skipping..."
-  fi    
-}
+# vscode_setup() {
+#   print_in_purple "\n • Setting up VS Code\n"
+#   if hash code; then
+#     for line in $(cat "${dotfiles_dir}"/vscode_extensions.txt | grep -v '^#'); do
+#       execute "code --install-extension $line" "Extension: $line"
+#     done
+#     echo ""
+#     execute 'ln -sf "$DOTFILES/vscode_settings.json" "$HOME/Library/Application Support/Code/User/settings.json"' "Linked VS Codes settings.json"
+#   else
+#     print_in_green "Visual Studio Code not installed. Skipping..."
+#   fi
+# }
 
 ### MAIN ###
 # Trap Ctrl-C
@@ -198,18 +208,18 @@ trap 'trap "" INT; echo -e "${YELLOW}Aborting...${RESET}"; exit 1' INT
 intro
 sudoers_add
 prevent_sleep
-default_dirs
+# default_dirs
 # macsetup_check
 xcode
 osx_settings
 homebrew
-mas_app_store_apps
+# mas_app_store_apps
 zsh_shell
 prezto
-# [ ! -d "$dotfiles_dir" ] && clone_dotfiles
+clone_dotfiles
 link_dotfiles
 #vscode_setup
-sudoers_remove
+# sudoers_remove
 
 # Done
 echo -e "${GREEN}Finished!!!\n${RESET}"
