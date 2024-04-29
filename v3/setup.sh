@@ -24,7 +24,7 @@ intro()  {
 #     export dotfiles_dir="$base_dir/Dotfiles"
 #     export SCRIPT_DIR="$base_dir/Code/macsetup/v2"
 #     # export helper_file="$base_dir/Code/macsetup/helper.sh"
-  
+
 #   else
 #     echo -e "${YELLOW}This script is meant for OSX with iCloud. Aborting...${RESET}"
 #     exit 1
@@ -58,28 +58,28 @@ sudoers_add() {
   echo -e "${GREEN}Adding $USER to /etc/sudoers for the duration of the script\n${RESET}"
   # Ensure sudo
   /usr/bin/sudo -v || exit 1
-  
+
   USER_SUDOER="${USER} ALL=(ALL) NOPASSWD: ALL"
   echo "${USER_SUDOER}" | /usr/bin/sudo -E -- /usr/bin/tee -a /etc/sudoers >/dev/null
 }
 
-sudoers_remove() {
-  echo -e "${GREEN}Removing $USER from /etc/sudoers\n${RESET}"
-  /usr/bin/sudo -E -- /usr/bin/sed -i '' "/^${USER_SUDOER}/d" /etc/sudoers
-}
+# sudoers_remove() {
+#   echo -e "${GREEN}Removing $USER from /etc/sudoers\n${RESET}"
+#   /usr/bin/sudo -E -- /usr/bin/sed -i '' "/^${USER_SUDOER}/d" /etc/sudoers
+# }
 
 xcode() {
   # Install XCode Command Line Tools
   echo -e "${GREEN}Installing XCODE${RESET}"
-  
+
   if ! xcode-select --print-path &> /dev/null; then
     xcode-select --install &> /dev/null || { echo -e "${YELLOW}Could not install XCode. Aborting...${RESET}"; exit 1; }
-    
+
     until xcode-select --print-path &> /dev/null; do
       echo "Waiting for XCode to install..."
       sleep 5
-    done    
-  
+    done
+
   else
     echo -e "${GREEN} - Xcode Command Line Tools Installed${RESET}"
   fi
@@ -114,16 +114,16 @@ homebrew() {
   fi
 }
 
-# mas_app_store_apps() {
-#   if hash mas; then
-#     mas install "441258766" # Magnet
-#     mas install "1006087419" # SnippetsLab
-#     mas install "714196447" # MenuBar Stats
-#     # mas install "824183456" # Affinity Photo
-#     mas install "443987910" # 1password
-#     mas install "425955336" # Skitch
-#   fi
-# }
+mas_app_store_apps() {
+  if hash mas; then
+    # mas install "441258766" # Magnet
+    mas install "1006087419" # SnippetsLab
+    mas install "714196447" # MenuBar Stats
+    # mas install "824183456" # Affinity Photo
+    # mas install "443987910" # 1password
+    # mas install "425955336" # Skitch
+  fi
+}
 
 zsh_shell() {
   # Change to ZSH
@@ -164,37 +164,38 @@ prezto() {
 clone_dotfiles() {
   print_in_purple "\n • Cloning dotfiles\n"
   export DOTFILES="$HOME/dotfiles"
-  
+
   if [[ ! -d "$DOTFILES" ]]; then
     mkdir -p "$DOTFILES"
     git clone "https://github.com/tadone/dotfiles" "$DOTFILES"
-  fi  
+  fi
 }
 
 link_dotfiles() {
   # Create Links from dotfiles
   echo -e "${GREEN}Linking dotfiles${RESET}"
-
-  ln -sf "$dotfiles_dir/vimrc-new" "$HOME/.vimrc"
   ln -sf "$dotfiles_dir/zpreztorc" "$HOME/.zpreztorc"
-  ln -sf "$dotfiles_dir/pure.zsh" "$HOME/.zprezto/modules/prompt/external/pure/pure.zsh"
   ln -sf "$dotfiles_dir/zshrc" "$HOME/.zshrc"
-  if [ ! -d "$HOME/.ssh" ]; then mkdir -p "$HOME/.ssh"; fi
-  # ln -sf "$dotfiles_dir/ssh_config" "$HOME/.ssh/config"
+  ln -sf "$dotfiles_dir/p10k.zsh" "$HOME/.p10k.zsh"
   ln -sf "$dotfiles_dir/gitconfig" "$HOME/.gitconfig"
+  ln -sf "$dotfiles_dir/gitignore" "$HOME/.gitignore"
+
+  # Create SSH Directory
+  echo -e "${GREEN}Creating SSH Dir${RESET}"
+  if [ ! -d "$HOME/.ssh" ]; then mkdir -p "$HOME/.ssh"; fi
 }
 
 # vscode_setup() {
 #   print_in_purple "\n • Setting up VS Code\n"
 #   if hash code; then
-#     for line in $(cat "${dotfiles_dir}"/vscode_extensions.txt | grep -v '^#'); do 
+#     for line in $(cat "${dotfiles_dir}"/vscode_extensions.txt | grep -v '^#'); do
 #       execute "code --install-extension $line" "Extension: $line"
 #     done
 #     echo ""
 #     execute 'ln -sf "$dotfiles_dir/vscode_settings.json" "$HOME/Library/Application Support/Code/User/settings.json"' "Linked VS Codes settings.json"
 #   else
 #     print_in_green "Visual Studio Code not installed. Skipping..."
-#   fi    
+#   fi
 # }
 
 ### MAIN ###
@@ -216,7 +217,7 @@ prezto
 clone_dotfiles
 link_dotfiles
 #vscode_setup
-sudoers_remove
+# sudoers_remove
 
 # Done
 echo -e "${GREEN}Finished!!!\n${RESET}"
