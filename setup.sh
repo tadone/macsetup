@@ -160,16 +160,16 @@ prezto() {
 }
 
 clone_macsetup() {
-  print_in_purple "\n • Cloning macsetup\n"
-
+  # print_in_purple "\n • Cloning macsetup\n"
+  echo -e "${GREEN}\n • Cloning macsetup\n${RESET}"
   if [[ ! -d "$MACSETUP" ]]; then
     git clone "https://github.com/tadone/macsetup" "$MACSETUP"
   fi
 }
 
 clone_dotfiles() {
-  print_in_purple "\n • Cloning dotfiles\n"
-
+  # print_in_purple "\n • Cloning dotfiles\n"
+  echo -e "${GREEN}\n • Cloning dotfiles\n${RESET}"
   if [[ ! -d "$DOTFILES" ]]; then
     git clone "https://github.com/tadone/dotfiles" "$DOTFILES"
   fi
@@ -219,6 +219,7 @@ homebrew
 # mas_app_store_apps
 zsh_shell
 prezto
+clone_macsetup
 clone_dotfiles
 link_dotfiles
 #vscode_setup
