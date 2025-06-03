@@ -40,7 +40,7 @@ brew "git-delta"
 
 # Work
 brew "krew"
-berw "awscli"
+brew "awscli"
 brew "kubernetes-cli"
 brew "kubectx"
 brew "kustomize"
